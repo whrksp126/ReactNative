@@ -3,6 +3,7 @@ import { StyleSheet, Platform } from 'react-native';
 import styled from 'styled-components/native'
 import Constants from 'expo-constants';
 import _ from 'lodash';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -51,12 +52,51 @@ const TempText = styled.Text`
   margin-bottom: 12px
 `;
 
+const Check = styled.TouchableOpacity`
+  margin-right: 4px
+`;
+
+const CheckIcon = styled.Text`
+  font-size: 20px
+`;
+
 export default function App() {
 
   const [list, setList] = React.useState([
   ]);
 
   const [inputTodo, setInputTodo] = React.useState(' ');
+
+  React.useEffect(()=>{
+  // 앱이 처음 실행이 됬을 때 데이터를 읽어오도록 함
+    AsyncStorage.getItem('list')
+    // list 라는 이름으로 데이터를 가져옴
+      .then(data => {
+        // 데이터를 처음 불러오는 부분ㄴ
+        if(data !== null){
+          // 데이터가 null 이면 데이터가 한번도 생성이 된적이 없을때
+          // 데어티가 null 이 아니면 무언가 저장된 데이터가 있다는 것임
+          setList(JSON.parse(data));
+          // 불러온 데이터는 string 이니까 실제 JOSN 데이터로 변경하는 과정을 거침
+          // 변경한 데이터를 setList 에 넣어줌
+        }
+        else{
+
+        }
+      })
+      .catch(error => {
+        alert(error.message);
+      })
+  },[])
+
+  const store = (newList) => {
+    // 새로운 목록 newList 를 받아서 처리를 한다
+    setList(newList);
+    // setList에 새로운 데이터를 저장함
+    AsyncStorage.setItem('list', JSON.stringify(newList));
+    // JSON.stringify(newList)를 이용해 오브젝트를 string으로 변환함
+    // list라는 키에 stringify한 결과인 strign 데이터를 저장해둔다
+  }
 
   // 리턴은 컴포넌트, 컴포넌트로 일어진 배열
   return (
@@ -65,14 +105,20 @@ export default function App() {
       <Cotents>
         {list.map( item => {
           return (
-            <TodoItem key={ item.id }>
+            <TodoItem key={ item.id }> 
+            <Check>
+              <CheckIcon>
+              {item.done ? '☑️' : '✓'}  
+              </CheckIcon>
+            </Check>
             <TodoItemText>
+            
               { item.todo }
             </TodoItemText>
             <TodoItemButton 
               title = "삭제" 
               onPress={ ()=>{ 
-                setList(_.reject( list, element => element.id === item.id ));
+                store(_.reject( list, element => element.id === item.id ));
                 // list 안의 id 값이 선택한 item.id 와 같은 것을 제거 한다
                 // 선택 item 을 제거하고 다시 setlist로 설정해 보여지게 함
               } } 
@@ -105,8 +151,9 @@ export default function App() {
               // getime 을 이용해 유니크 타임 스탬프를 가지고올 수 있고
               // tostring 을 이용해 문자열로 변환한다.
               todo: inputTodo,
+              done: false,
             };
-            setList([
+            store([
               ...list, // 전개 연산자
               newItem,
             ]);
