@@ -4,6 +4,7 @@ import styled from 'styled-components/native'
 import Constants from 'expo-constants';
 import _ from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import produce from 'immer'; 
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -63,6 +64,7 @@ const CheckIcon = styled.Text`
 export default function App() {
 
   const [list, setList] = React.useState([
+    
   ]);
 
   const [inputTodo, setInputTodo] = React.useState(' ');
@@ -72,7 +74,7 @@ export default function App() {
     AsyncStorage.getItem('list')
     // list 라는 이름으로 데이터를 가져옴
       .then(data => {
-        // 데이터를 처음 불러오는 부분ㄴ
+        // 데이터를 처음 불러오는 부분
         if(data !== null){
           // 데이터가 null 이면 데이터가 한번도 생성이 된적이 없을때
           // 데어티가 null 이 아니면 무언가 저장된 데이터가 있다는 것임
@@ -106,9 +108,17 @@ export default function App() {
         {list.map( item => {
           return (
             <TodoItem key={ item.id }> 
-            <Check>
+            <Check onPress={()=>{
+              store( produce( list, draft => {
+                const index = list.indexOf(item);
+                // check 를 클릭하면 해당 item이 몇 번째 index 인가를 확인할수 있음
+                draft[index].done = !list[index].done;
+                // dreft 는 원본을 보존하고 새로운 것을 만들기 위한 중간 단계 
+                // dreft 에 index.done 을 현재 값과 반대 값을 넣겠다.
+              } ) );
+            }}>
               <CheckIcon>
-              {item.done ? '☑️' : '✓'}  
+              {item.done ? '✅' : '✔️'}  
               </CheckIcon>
             </Check>
             <TodoItemText>
