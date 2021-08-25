@@ -14,9 +14,10 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="List" component={List} />
+        <Stack.Screen name="List" component={List} options={{title:'일기 목록'}}/>
+        {/* options에 title로 넣은 값은 stack에서 기본으로 지원하는 ← 버튼에 자동으로 등록되며 실제 title로도 보여짐 */}
         <Stack.Screen name="Datall" component={Datall} />
-        <Stack.Screen name="Form" component={Form} />
+        <Stack.Screen name="Form" component={Form} options={{title:'일기 작성'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

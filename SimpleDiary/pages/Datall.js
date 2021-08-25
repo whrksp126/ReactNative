@@ -1,16 +1,20 @@
 import React from 'react';
-import {Button, Text, View} from 'react-native'
+import Container from '../components/Container'
+import Contents from '../components/Contents';
+import styled from 'styled-components/native'
+
+const Text = styled.Text`
+  font-size: 20px;
+  line-height: 28px;
+`;
 
 function Datall({navigation}) {
   return (
-    <View>
-      <Text>Datall 페이지 입니다.</Text>
-      <Button 
-        title="이전 페이지로"
-        onPress={()=>navigation.goBack()}
-        // 바로 이전 페이지로 이동한다.  
-      ></Button>
-    </View>
+    <Container>
+      <Contents>
+        <Text>{`오늘 비가 정말 많이 왔다ㅠㅠ`}</Text>
+      </Contents>
+    </Container>
   );
 }
 

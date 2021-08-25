@@ -69,7 +69,7 @@ export default function App() {
 
   const [inputTodo, setInputTodo] = React.useState(' ');
 
-  React.useEffect(()=>{
+  React.useEffect( async()=>{
   // 앱이 처음 실행이 됬을 때 데이터를 읽어오도록 함
     AsyncStorage.getItem('list')
     // list 라는 이름으로 데이터를 가져옴
