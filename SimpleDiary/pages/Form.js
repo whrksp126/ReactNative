@@ -25,7 +25,8 @@ function Form({navigation}) {
   const store = async () => {
     if( date === '' ) return;
     if( text === '' ) return;
-    // date text 에 대한 폼 검즘
+    // date text 에 아무것도 입력이 되지 않으면 아무 실행 하지 않도록 함
+    // 폼 검즘
 
     let list = await AsyncStorage.getItem('list');
     if( list === null ) {
@@ -52,14 +53,14 @@ function Form({navigation}) {
   return (
     <Container>
       <Contents>
-          <Label>날짜</Label>
+        <Label>날짜</Label>
         <Input 
           placeholder={'YYYY-MM-DD 형식으로 입력하세요'}
           value={date}  
           onChangeText={ value => setDate( value ) }
           // 입력 받은 데이터를 바로 화면에 보이게 해줌
         />
-          <Label>내용</Label>
+        <Label>내용</Label>
         <Input 
           multiline={true} 
           // mutiline으로 한줄 이상의 글 작성 가능 
