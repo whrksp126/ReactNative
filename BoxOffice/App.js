@@ -1,6 +1,14 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
+
 import React from 'react';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import BoxOfficeNavigator from './Navigators/BoxOfficeNavigator'
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import AppNavigator from './navigators/AppNavigator';
 
 const Theme = {
   ...DefaultTheme,
@@ -11,11 +19,10 @@ const Theme = {
 };
 
 const App: () => Node = () => {
-
   return (
     <>
       <NavigationContainer theme={Theme}>
-        <BoxOfficeNavigator/>
+        <AppNavigator />
       </NavigationContainer>
     </>
   );
