@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components/native'
 import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
 import {PermissionsAndroid} from "react-native";
+import storage from '../net/storage';
 
 const Title = styled.Text`
     font-size: 36px;
@@ -25,30 +26,30 @@ function Component() {
   const [hashtags, setHashtags] = React.useState('');
   const [imageUri, setImageUri] = React.useState(null);
 
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA, {
-          title: "Cool Photo App Camera Permission",
-          message: "Cool Photo App needs access to your camera " +
-            "so you can take awesome pictures.",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the Camera");
-      } else {
-        console.log("Camera permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+  // const requestCameraPermission = async () => {
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.CAMERA, {
+  //         title: "Cool Photo App Camera Permission",
+  //         message: "Cool Photo App needs access to your camera " +
+  //           "so you can take awesome pictures.",
+  //         buttonNeutral: "Ask Me Later",
+  //         buttonNegative: "Cancel",
+  //         buttonPositive: "OK"
+  //       }
+  //     );
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       console.log("You can use the Camera");
+  //     } else {
+  //       console.log("Camera permission denied");
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // };
 
   const openCamera = () => {
-    requestCameraPermission(),
+    // requestCameraPermission(),
 
     launchImageLibrary({
       mediaType: 'photo',
@@ -73,7 +74,7 @@ function Component() {
         title="이미지 선택" 
         onPress={openCamera} 
       />
-      <Image source={imageUri}/>
+        <Image source={imageUri}/>
       <Input 
         placeholder="#해시태그"
         value={ hashtags }
@@ -81,15 +82,16 @@ function Component() {
       />
       <Button 
         title="저장" 
-        // onPress={ () => {
-        //   storage.append( {
-        //     url,
-        //     hashtags,
-        //   })
-        //   .then( () => {
-        //     props.navigation.goBack();
-        //   });
-        // }}
+        onPress={ () => {console.log(imageUri)
+          const uri = imageUri.uri
+          storage.append( {
+            uri,
+            hashtags,
+          })
+          .then( () => {
+            props.navigation.goBack();
+          });
+        }}
       />
     </>
   )
